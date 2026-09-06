@@ -25,8 +25,10 @@ Look for: `PicoVibe-*-osx-arm64.dmg` (macOS M-series only for now)
 1. Open the DMG and drag `Pico Vibe.app` into Applications
 2. Insert the module; when the app shows connected, you’re ready
 3. For Cursor / Codex / Claude Code: install AI integration in the app; Codex users must also trust the hook once via `/hooks`
-4. Music mode may ask for Screen & System Audio Recording once (loudness only — no recording, no screen capture)
+4. Music mode may ask for **system audio** permission once (loudness only — no recording, no saved audio). **From 1.1.21 onward, Screen Recording is no longer required**
 5. Touch “Next track” may ask for Automation access to Music / Spotify the first time
+
+AI ambience, system status, and touch reading work without those permissions.
 
 ## Features
 
@@ -48,7 +50,8 @@ Map CPU, memory, battery, and similar metrics to the light strip so load is read
 
 ### Music vibe
 
-Lights breathe and pulse with whatever is playing on the system. Sensitivity and vibe style are adjustable in the app.
+Lights breathe and pulse with whatever is playing on the system. Sensitivity and vibe style are adjustable in the app.  
+Recent builds capture system-audio loudness only — **no screen recording, no audio recording, nothing saved**.
 
 ![Music vibe UI](docs/images/app-music.png)
 
