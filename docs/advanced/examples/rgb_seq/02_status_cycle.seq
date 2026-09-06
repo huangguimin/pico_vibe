@@ -1,0 +1,6 @@
+# Run the four-step status presentation forever.
+LOOP=0
+STEP=solid,R=0,G=255,B=0,BR=70,MS=1000
+STEP=breathe,R=0,G=80,B=255,BR=90,SPD=40,MS=2500,TRANS=fade
+STEP=off,MS=300
+STEP=rainbow,BR=60,SPD=35,MS=3000,XFADE=400

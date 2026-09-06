@@ -68,3 +68,29 @@
 </p>
 
 <p align="center"><em>插入卡槽后，露出的灯条与 TOUCH 区域可直接点按操作。</em></p>
+
+## 进阶模式（不需要本应用）
+
+不想装 Pico Vibe 也可以玩：打开磁盘 `/Volumes/PICO_RGB/`，改文件即可控灯。
+
+| 文件 | 作用 |
+|---|---|
+| `RGB.INI` | 一行文本切换火焰 / 呼吸 / 彩虹等灯效 |
+| `RGB.SEQ` | 多步骤自动序列 |
+| `LED.BIN` | 自己灌 36 字节帧（适合脚本做律动） |
+| `TOUCH.TXT` | 只读触摸事件（单击 / 双击 / 长按） |
+
+说明、全部示例配置和 Python 例程见：
+
+**[→ 进阶模式文档与例程](docs/advanced/README.md)**
+
+```bash
+# 火焰示例
+cp docs/advanced/examples/rgb/13_fire.ini /Volumes/PICO_RGB/RGB.INI
+
+# 彩虹滚动灌帧
+python3 docs/advanced/examples/scripts/led_rainbow.py /Volumes/PICO_RGB/LED.BIN
+```
+
+玩进阶文件时建议先退出本应用，避免两边同时写盘。
+

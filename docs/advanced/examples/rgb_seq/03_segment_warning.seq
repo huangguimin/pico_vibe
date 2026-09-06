@@ -1,0 +1,4 @@
+# Flash only LEDs 2..9, repeat the sequence three times, then hold off.
+LOOP=3
+STEP=blink,R=255,G=80,B=0,BR=120,ON=100,OFF=100,PULSES=3,GAP=400,START=2,N=8,MS=1000,GAMMA=1,MAXMA=300
+STEP=off,START=2,N=8,MS=300

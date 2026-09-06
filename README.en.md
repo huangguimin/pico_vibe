@@ -68,3 +68,26 @@ Change mappings in the app’s touch settings and save.
 </p>
 
 <p align="center"><em>Once inserted, the LED row and TOUCH zone stay reachable for quick taps.</em></p>
+
+## Advanced mode (no app required)
+
+You can drive the module without Pico Vibe by editing files on `/Volumes/PICO_RGB/`.
+
+| File | Purpose |
+|---|---|
+| `RGB.INI` | One-line resident effects |
+| `RGB.SEQ` | Multi-step sequences |
+| `LED.BIN` | 36-byte host frames |
+| `TOUCH.TXT` | Read-only touch events |
+
+Docs, sample configs, and Python scripts:
+
+**[→ Advanced mode](docs/advanced/README.en.md)**
+
+```bash
+cp docs/advanced/examples/rgb/13_fire.ini /Volumes/PICO_RGB/RGB.INI
+python3 docs/advanced/examples/scripts/led_rainbow.py /Volumes/PICO_RGB/LED.BIN
+```
+
+Quit the app first when using advanced files so writes do not collide.
+
