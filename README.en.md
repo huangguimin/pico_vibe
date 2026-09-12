@@ -34,11 +34,13 @@ AI ambience, system status, and touch reading work without those permissions.
 
 ### AI ambience
 
-Follows Cursor / Codex / Claude Code — idle, thinking, running, waiting for approval, done, and error each have their own look. When approval is needed, the lights flash yellow; tap the card edge to allow or deny.
+Follows Cursor / Codex / Claude Code — idle, thinking, running, waiting for approval, done, error, and stale each have their own look. When a touch-approval window is open, lights flash yellow by default; tap the card edge to allow or deny. If control returns to the AI’s own approval UI, lights stay solid yellow by default.
 
 ![AI ambience UI](docs/images/app-ai.png)
 
 *AI ambience: colors, brightness, and effects per AI state.*
+
+**Multi-agent · one LED per session (1.1.26):** enable under AI ambience → Display mode. The default remains one shared strip state; when enabled, up to 12 LEDs map to client/session (and reliable sub-agent IDs when available), each with its own colors and effects for thinking, tools, idle, done, error, stale, and approval. Rename, pin lamp slots, and reverse direction. Only one session can use touch approval at a time; others queue or fall back to the client UI.
 
 ### System status
 
