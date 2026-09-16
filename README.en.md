@@ -12,6 +12,22 @@ For **Apple Silicon (M-series) Macs** with a full-size SD card slot. Insert the 
 
 <p align="center"><em>Plug in the module, launch the app — the side lights follow status and music.</em></p>
 
+## Urgent firmware update (required before macOS 27)
+
+> **Update this firmware before upgrading to macOS 27.**  
+> If you upgrade the OS first, the device volume may no longer mount, and file-based OTA becomes difficult or impossible.
+
+1. On a Mac still running a **pre–macOS 27** system, insert the module and confirm `/Volumes/PICO_RGB/` appears (older firmware may show `PICO_RAM`)
+2. Quit the Pico Vibe app so it is not writing to the volume
+3. Download [`UPDATE.UF2`](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
+4. Copy `UPDATE.UF2` to the **volume root** (do not rename it)
+5. Wait for the device to verify and flash; **do not unplug or remove power**
+6. Only then upgrade to macOS 27
+
+Release page:
+
+**[→ firmware-pre-macos27 (UPDATE.UF2)](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)**
+
 ## Download
 
 Get the **Apple Silicon** installer from Releases:

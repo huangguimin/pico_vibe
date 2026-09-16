@@ -12,6 +12,22 @@
 
 <p align="center"><em>插上模块、打开应用，侧边灯光就会跟着状态和音乐变化。</em></p>
 
+## 紧急固件更新（升级 macOS 前必做）
+
+> **请在升级到 macOS 27 之前完成此固件更新。**  
+> 若先升系统再更新固件，设备磁盘可能无法被识别/挂载，之后就很难再通过拷文件方式升级。
+
+1. 在 **macOS 27 之前**的系统上插入设备，确认出现 `/Volumes/PICO_RGB/`（旧固件可能是 `PICO_RAM`）
+2. 退出 Pico Vibe 应用，避免抢写磁盘
+3. 下载 [`UPDATE.UF2`](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
+4. 把 `UPDATE.UF2` **拷贝到该磁盘根目录**（不要改文件名）
+5. 等待设备自动校验并升级；过程中 **勿断电、勿拔卡**
+6. 升级完成后再升级 macOS 27
+
+固件下载与说明见发布页：
+
+**[→ firmware-pre-macos27（UPDATE.UF2）](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)**
+
 ## 下载
 
 请从 Releases 下载 **Apple Silicon** 安装包：

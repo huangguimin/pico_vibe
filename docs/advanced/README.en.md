@@ -110,6 +110,16 @@ python3 docs/advanced/examples/scripts/touch_monitor.py /Volumes/PICO_RGB/TOUCH.
 
 Copy an official upgrade package to the volume root and wait. Do not unplug power during upgrade. Use official packages only.
 
+### Urgent firmware: `UPDATE.UF2` (required before macOS 27)
+
+Flash this **before** upgrading to macOS 27. Otherwise the device volume may stop mounting and file-based OTA may no longer work.
+
+1. Confirm `/Volumes/PICO_RGB/` (or `PICO_RAM`) still mounts on your current OS
+2. Quit Pico Vibe
+3. Download `UPDATE.UF2` from [firmware-pre-macos27](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
+4. Copy it to the volume root; keep the filename `UPDATE.UF2`
+5. Wait for the update to finish, then upgrade macOS
+
 ---
 
 ## Notes

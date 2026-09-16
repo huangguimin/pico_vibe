@@ -159,6 +159,16 @@ python3 docs/advanced/examples/scripts/touch_monitor.py /Volumes/PICO_RGB/TOUCH.
 升级过程中勿断电、勿拔卡。失败时正式版有试运行保护可回退。  
 请只用官方包，勿自行擦写安全区。
 
+### 紧急固件：`UPDATE.UF2`（升级 macOS 27 前必做）
+
+升级到 **macOS 27 之前**，请先刷这份固件；否则系统升级后可能读不到设备盘，无法再走拷文件 OTA。
+
+1. 确认当前系统仍能挂载 `/Volumes/PICO_RGB/`（或 `PICO_RAM`）
+2. 退出 Pico Vibe
+3. 从 [firmware-pre-macos27](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27) 下载 `UPDATE.UF2`
+4. 拷到磁盘根目录，保持文件名为 `UPDATE.UF2`
+5. 等待自动升级完成后再升 macOS
+
 ---
 
 ## 注意
