@@ -167,7 +167,8 @@ python3 docs/advanced/examples/scripts/touch_monitor.py /Volumes/PICO_RGB/TOUCH.
 2. 退出 Pico Vibe
 3. 从 [firmware-pre-macos27](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27) 下载 `UPDATE.UF2`
 4. 拷到磁盘根目录，保持文件名为 `UPDATE.UF2`
-5. 等待自动升级完成后再升 macOS
+5. 等待指示灯 **绿灯全亮**
+6. 绿灯全亮后 **拔出再插入** 设备，完成升级；确认正常后再升 macOS
 
 ---
 

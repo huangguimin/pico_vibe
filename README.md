@@ -21,8 +21,9 @@
 2. 退出 Pico Vibe 应用，避免抢写磁盘
 3. 下载 [`UPDATE.UF2`](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
 4. 把 `UPDATE.UF2` **拷贝到该磁盘根目录**（不要改文件名）
-5. 等待设备自动校验并升级；过程中 **勿断电、勿拔卡**
-6. 升级完成后再升级 macOS 27
+5. 等待指示灯 **绿灯全亮**
+6. 绿灯全亮后 **拔出再插入** 设备，完成升级
+7. 确认正常后再升级 macOS 27
 
 固件下载与说明见发布页：
 

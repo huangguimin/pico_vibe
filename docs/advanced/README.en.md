@@ -118,7 +118,8 @@ Flash this **before** upgrading to macOS 27. Otherwise the device volume may sto
 2. Quit Pico Vibe
 3. Download `UPDATE.UF2` from [firmware-pre-macos27](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
 4. Copy it to the volume root; keep the filename `UPDATE.UF2`
-5. Wait for the update to finish, then upgrade macOS
+5. Wait until **all LEDs are solid green**
+6. Then **unplug and re-insert** the module to finish the upgrade; confirm it works before upgrading macOS
 
 ---
 

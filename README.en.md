@@ -21,8 +21,9 @@ For **Apple Silicon (M-series) Macs** with a full-size SD card slot. Insert the 
 2. Quit the Pico Vibe app so it is not writing to the volume
 3. Download [`UPDATE.UF2`](https://github.com/huangguimin/pico_vibe/releases/tag/firmware-pre-macos27)
 4. Copy `UPDATE.UF2` to the **volume root** (do not rename it)
-5. Wait for the device to verify and flash; **do not unplug or remove power**
-6. Only then upgrade to macOS 27
+5. Wait until **all LEDs are solid green**
+6. After the green lights stay on, **unplug and re-insert** the module to finish the upgrade
+7. Confirm it works, then upgrade to macOS 27
 
 Release page:
 
