@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PicoVibe.Core\PicoVibe.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\PicoVibe.App\Services\AppLog.cs" Link="Services\AppLog.cs" />
+    <Compile Include="..\PicoVibe.App\Services\CrashLog.cs" Link="Services\CrashLog.cs" />
+    <Compile Include="..\PicoVibe.App\Services\AppConfigMerge.cs" Link="Services\AppConfigMerge.cs" />
+    <Compile Include="..\PicoVibe.App\Services\HookPipeServer.cs" Link="Services\HookPipeServer.cs" />
+    <Compile Include="..\PicoVibe.App\Services\LightOrchestrator.MultiAgent.cs" Link="Services\LightOrchestrator.MultiAgent.cs" />
+    <Compile Include="..\PicoVibe.App\Services\LightOrchestrator.cs" Link="Services\LightOrchestrator.cs" />
+    <Compile Include="..\PicoVibe.App\Services\SleepGuard.cs" Link="Services\SleepGuard.cs" />
+    <Compile Include="..\PicoVibe.App\Services\VibeSessionEpochStore.cs" Link="Services\VibeSessionEpochStore.cs" />
+  </ItemGroup>
+</Project>

@@ -12,6 +12,32 @@ For **Apple Silicon (M-series) Macs** with a full-size SD card slot. Insert the 
 
 <p align="center"><em>Plug in the module, launch the app — the side lights follow status and music.</em></p>
 
+## What’s open source
+
+This repository open-sources the **Pico Vibe desktop app source (v1.1.26)** under the MIT license — see [LICENSE](LICENSE).
+
+| Open | Closed |
+|---|---|
+| `app/` desktop app (macOS / Windows), hooks, and tests | Device firmware source |
+| | OTA signing, OTP, factory tooling, keys |
+
+Firmware updates ship only as **Release assets**. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Build from source (macOS)
+
+Requires the .NET 8 SDK.
+
+```bash
+export PATH="$HOME/.dotnet:$PATH"
+dotnet test app/PicoVibe.Tests/PicoVibe.Tests.csproj -c Release
+dotnet test app/PicoVibe.App.Tests/PicoVibe.App.Tests.csproj -c Release
+dotnet test app/PicoVibe.Hook.Tests/PicoVibe.Hook.Tests.csproj -c Release
+dotnet test app/PicoVibe.Runtime.Tests/PicoVibe.Runtime.Tests.csproj -c Release
+dotnet build app/PicoVibe.Mac/PicoVibe.Mac.csproj -c Release
+```
+
+App version: [`app/VERSION`](app/VERSION).
+
 ## Urgent firmware update (required before macOS 27)
 
 > **Update this firmware before upgrading to macOS 27.**  
@@ -113,3 +139,8 @@ python3 docs/advanced/examples/scripts/led_rainbow.py /Volumes/PICO_RGB/LED.BIN
 
 Quit the app first when using advanced files so writes do not collide.
 
+## License
+
+- Source in this repository: [MIT](LICENSE)
+- Third-party notices: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+- The Pico Vibe name and product marks remain with the project owner; the license does not grant trademark rights

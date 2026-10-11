@@ -1,0 +1,126 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:PicoVibe.Mac"
+             x:Class="PicoVibe.Mac.App"
+             Name="Pico Vibe"
+             RequestedThemeVariant="Default">
+  <Application.Resources>
+    <ResourceDictionary>
+      <!-- One palette per theme variant. "Default" above means Avalonia picks
+           the variant from the system appearance and swaps these live. -->
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="AppBackground" Color="#F5F6FA" />
+          <SolidColorBrush x:Key="SurfaceBackground" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="SurfaceBorder" Color="#E4E7EC" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#101828" />
+          <SolidColorBrush x:Key="MutedText" Color="#667085" />
+          <SolidColorBrush x:Key="SidebarBackground" Color="#161B26" />
+          <SolidColorBrush x:Key="SidebarMutedText" Color="#98A2B3" />
+          <SolidColorBrush x:Key="NavForeground" Color="#D0D5DD" />
+          <SolidColorBrush x:Key="NavSelectedBackground" Color="#344054" />
+          <SolidColorBrush x:Key="AccentBackground" Color="#5B5BD6" />
+          <SolidColorBrush x:Key="InfoCardBackground" Color="#F1F0FF" />
+          <SolidColorBrush x:Key="InfoCardBorder" Color="#DDD6FE" />
+          <SolidColorBrush x:Key="SuccessBackground" Color="#ECFDF3" />
+          <SolidColorBrush x:Key="SuccessBorder" Color="#ABEFC6" />
+          <SolidColorBrush x:Key="SuccessText" Color="#027A48" />
+          <SolidColorBrush x:Key="SuccessStrongText" Color="#05603A" />
+          <SolidColorBrush x:Key="SuccessDot" Color="#12B76A" />
+          <SolidColorBrush x:Key="WarnBackground" Color="#FFF6ED" />
+          <SolidColorBrush x:Key="WarnBorder" Color="#FEDF89" />
+          <SolidColorBrush x:Key="WarnText" Color="#B54708" />
+          <SolidColorBrush x:Key="WarnIcon" Color="#F79009" />
+          <SolidColorBrush x:Key="LedOffBrush" Color="#E4E7EC" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="AppBackground" Color="#14161B" />
+          <SolidColorBrush x:Key="SurfaceBackground" Color="#1D2027" />
+          <SolidColorBrush x:Key="SurfaceBorder" Color="#2E323C" />
+          <SolidColorBrush x:Key="PrimaryText" Color="#F2F4F7" />
+          <SolidColorBrush x:Key="MutedText" Color="#98A2B3" />
+          <SolidColorBrush x:Key="SidebarBackground" Color="#0E1015" />
+          <SolidColorBrush x:Key="SidebarMutedText" Color="#98A2B3" />
+          <SolidColorBrush x:Key="NavForeground" Color="#D0D5DD" />
+          <SolidColorBrush x:Key="NavSelectedBackground" Color="#3A4152" />
+          <SolidColorBrush x:Key="AccentBackground" Color="#7A7AE6" />
+          <SolidColorBrush x:Key="InfoCardBackground" Color="#22243A" />
+          <SolidColorBrush x:Key="InfoCardBorder" Color="#3B3B6B" />
+          <SolidColorBrush x:Key="SuccessBackground" Color="#0F2A1D" />
+          <SolidColorBrush x:Key="SuccessBorder" Color="#20543A" />
+          <SolidColorBrush x:Key="SuccessText" Color="#6CE9A6" />
+          <SolidColorBrush x:Key="SuccessStrongText" Color="#A6F4C5" />
+          <SolidColorBrush x:Key="SuccessDot" Color="#32D583" />
+          <SolidColorBrush x:Key="WarnBackground" Color="#2B1D10" />
+          <SolidColorBrush x:Key="WarnBorder" Color="#5A431A" />
+          <SolidColorBrush x:Key="WarnText" Color="#FDB022" />
+          <SolidColorBrush x:Key="WarnIcon" Color="#FDB022" />
+          <SolidColorBrush x:Key="LedOffBrush" Color="#2E323C" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <local:EnumLabelConverter x:Key="EnumLabel" />
+      <DataTemplate x:Key="EnumItemTemplate">
+        <TextBlock Text="{Binding Converter={StaticResource EnumLabel}}" />
+      </DataTemplate>
+    </ResourceDictionary>
+  </Application.Resources>
+  <Application.Styles>
+    <FluentTheme />
+    <!-- FluentTheme does not carry the ColorPicker templates; without this the
+         pickers render as zero-height nothing. -->
+    <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource SurfaceBackground}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SurfaceBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="Padding" Value="20" />
+      <Setter Property="Margin" Value="0,0,0,16" />
+    </Style>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="17" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+    <Style Selector="TextBlock.hint">
+      <Setter Property="Foreground" Value="{DynamicResource MutedText}" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="TextBlock.eyebrow">
+      <Setter Property="Foreground" Value="{DynamicResource MutedText}" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.pageTitle">
+      <Setter Property="Foreground" Value="{DynamicResource PrimaryText}" />
+      <Setter Property="FontSize" Value="28" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="ListBoxItem.nav">
+      <Setter Property="Padding" Value="14,12" />
+      <Setter Property="Margin" Value="0,3" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Foreground" Value="{DynamicResource NavForeground}" />
+      <Setter Property="FontSize" Value="15" />
+    </Style>
+    <Style Selector="ListBoxItem.nav:selected">
+      <Setter Property="Background" Value="{DynamicResource NavSelectedBackground}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="CornerRadius" Value="9" />
+      <Setter Property="Padding" Value="16,9" />
+    </Style>
+    <Style Selector="TextBox">
+      <Setter Property="MinHeight" Value="32" />
+    </Style>
+    <Style Selector="ComboBox">
+      <Setter Property="MinHeight" Value="32" />
+    </Style>
+    <Style Selector="Expander.advanced">
+      <Setter Property="Margin" Value="0,12,0,0" />
+    </Style>
+  </Application.Styles>
+</Application>

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PicoVibe</AssemblyName>
+    <RootNamespace>PicoVibe.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\PicoVibe.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets\PicoVibe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PicoVibe.Core\PicoVibe.Core.csproj" />
+    <ProjectReference Include="..\PicoVibe.Runtime\PicoVibe.Runtime.csproj" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Services\AppLog.cs" />
+    <Compile Remove="Services\AppConfigMerge.cs" />
+    <Compile Remove="Services\HookPipeServer.cs" />
+    <Compile Remove="Services\LightOrchestrator.cs" />
+    <Compile Remove="Services\LightOrchestrator.MultiAgent.cs" />
+    <Compile Remove="Services\VibeSessionEpochStore.cs" />
+  </ItemGroup>
+</Project>

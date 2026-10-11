@@ -5,4 +5,19 @@
 *.exe
 *.msi
 *.AppImage
+*.uf2
 .DS_Store
+
+# .NET / native build outputs
+**/bin/
+**/obj/
+**/TestResults/
+*.trx
+*.coverage
+*.coveragexml
+/build-pico-vibe-macos/
+/dist/
+/out/
+
+# Local tool caches
+**/clang-module-cache/

@@ -12,6 +12,32 @@
 
 <p align="center"><em>插上模块、打开应用，侧边灯光就会跟着状态和音乐变化。</em></p>
 
+## 开源范围
+
+本仓库开源 **Pico Vibe 桌面应用源码（v1.1.26）**，MIT 许可，见 [LICENSE](LICENSE)。
+
+| 开源 | 不开源 |
+|---|---|
+| `app/` 桌面端（macOS / Windows）、Hook 与测试 | 设备固件源码 |
+| | OTA 签名、OTP、量产工具、密钥 |
+
+固件升级包仅以 **Release 附件** 提供。贡献说明见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+### 从源码构建（macOS）
+
+需要 .NET 8 SDK。
+
+```bash
+export PATH="$HOME/.dotnet:$PATH"
+dotnet test app/PicoVibe.Tests/PicoVibe.Tests.csproj -c Release
+dotnet test app/PicoVibe.App.Tests/PicoVibe.App.Tests.csproj -c Release
+dotnet test app/PicoVibe.Hook.Tests/PicoVibe.Hook.Tests.csproj -c Release
+dotnet test app/PicoVibe.Runtime.Tests/PicoVibe.Runtime.Tests.csproj -c Release
+dotnet build app/PicoVibe.Mac/PicoVibe.Mac.csproj -c Release
+```
+
+当前应用版本见 [`app/VERSION`](app/VERSION)。
+
 ## 紧急固件更新（升级 macOS 前必做）
 
 > **请在升级到 macOS 27 之前完成此固件更新。**  
@@ -181,3 +207,9 @@ python3 docs/advanced/examples/scripts/led_rainbow.py /Volumes/PICO_RGB/LED.BIN
 ```
 
 玩进阶文件时建议先退出本应用，避免两边同时写盘。
+
+## 许可
+
+- 本仓库源码：[MIT](LICENSE)
+- 第三方运行时与 UI 库：[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+- 「Pico Vibe」名称与产品标识仍归项目所有者；开源许可不授予商标使用权

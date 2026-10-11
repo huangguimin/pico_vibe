@@ -1,0 +1,412 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PicoVibe.Mac.MainWindow"
+        Title="Pico Vibe" Width="1180" Height="800"
+        MinWidth="1000" MinHeight="700"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*,Auto" Background="{DynamicResource AppBackground}">
+    <Border Grid.Row="0" Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource SurfaceBorder}"
+            BorderThickness="0,0,0,1" Padding="24,14">
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+        <Image Source="/Assets/PicoVibe.png" Width="40" Height="40" Margin="0,0,12,0" />
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+          <TextBlock Text="Pico Vibe" FontSize="21" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryText}" />
+          <TextBlock Text="让状态变成看得见的氛围" Classes="hint" />
+        </StackPanel>
+        <CheckBox Grid.Column="2" x:Name="LightsEnabledCheck" Content="灯光开启"
+                  VerticalAlignment="Center" Margin="0,0,18,0" />
+        <Border Grid.Column="3" Background="{DynamicResource SuccessBackground}" CornerRadius="16" Padding="13,7">
+          <TextBlock x:Name="ConnectionText" Text="正在查找设备" Foreground="{DynamicResource SuccessText}" />
+        </Border>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1" ColumnDefinitions="220,*">
+      <Border Background="{DynamicResource SidebarBackground}" Padding="16,22">
+        <Grid RowDefinitions="Auto,*,Auto">
+          <StackPanel>
+            <TextBlock Text="模式" Foreground="{DynamicResource SidebarMutedText}" FontSize="12"
+                       FontWeight="SemiBold" Margin="12,0,0,8" />
+            <ListBox x:Name="NavigationList" Background="Transparent" BorderThickness="0"
+                     SelectionMode="Single" SelectedIndex="0">
+              <ListBoxItem Classes="nav" Content="✦   AI 氛围" />
+              <ListBoxItem Classes="nav" Content="◉   系统状态" />
+              <ListBoxItem Classes="nav" Content="♪   音乐律动" />
+              <ListBoxItem Classes="nav" Content="⚙   设置" Margin="0,20,0,0" />
+            </ListBox>
+          </StackPanel>
+          <StackPanel Grid.Row="2">
+            <TextBlock Text="灯光响应触摸与电脑状态" Foreground="{DynamicResource MutedText}"
+                       FontSize="11" TextWrapping="Wrap" Margin="12,0,12,10" />
+            <Button x:Name="SaveButton" Content="保存当前设置" Classes="primary"
+                    HorizontalAlignment="Stretch" />
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <Grid x:Name="ContentColumns" Grid.Column="1" ColumnDefinitions="*,340" Margin="28,24">
+        <Grid Margin="0,0,22,0">
+          <ScrollViewer x:Name="AiPage">
+            <StackPanel MaxWidth="760" HorizontalAlignment="Stretch">
+              <TextBlock Text="AI AMBIENCE" Classes="eyebrow" />
+              <TextBlock Text="AI 氛围" Classes="pageTitle" Margin="0,4,0,4" />
+              <TextBlock Text="Cursor、Codex 和 Claude Code 的每一步，都有安静而明确的灯光回应。"
+                         Classes="hint" FontSize="13" Margin="0,0,0,20" />
+              <Border Classes="card" Background="{DynamicResource InfoCardBackground}" BorderBrush="{DynamicResource InfoCardBorder}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel>
+                    <TextBlock Text="AI 联动" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="自动识别空闲、思考、执行、确认和完成状态。"
+                               Classes="hint" Margin="0,4,0,0" />
+                  </StackPanel>
+                  <CheckBox Grid.Column="1" x:Name="AiEnabledCheck" Content="已启用"
+                            VerticalAlignment="Center" />
+                </Grid>
+              </Border>
+              <Border Classes="card">
+                <StackPanel Spacing="8">
+                  <TextBlock Text="显示方式" Classes="section" />
+                  <ComboBox x:Name="AiDisplayModeCombo" ItemTemplate="{StaticResource EnumItemTemplate}" MinWidth="220" />
+                  <TextBlock Text="整体模式汇总所有工作；多 Agent 模式为每个会话分配一颗灯。" Classes="hint" TextWrapping="Wrap" />
+                </StackPanel>
+              </Border>
+              <StackPanel x:Name="MultiAgentPanel" IsVisible="False">
+                <Border Classes="card">
+                  <StackPanel Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Text="灯位与 Agent" Classes="section" />
+                      <CheckBox Grid.Column="1" x:Name="AgentReverseCheck" Content="反转灯带方向" />
+                    </Grid>
+                    <UniformGrid x:Name="AgentLampStrip" Rows="1" Columns="12" />
+                    <TextBlock x:Name="AgentCapacityText" Classes="hint" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AgentTouchText" FontWeight="SemiBold" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AgentEmptyText" Text="等待 Agent 开始工作。更新 AI 集成后，开启 Cursor、Codex 或 Claude Code 会话，灯位会自动出现。" Classes="hint" TextWrapping="Wrap" />
+                    <ListBox x:Name="AgentList" MaxHeight="250">
+                      <ListBox.ItemTemplate>
+                        <DataTemplate>
+                          <Grid ColumnDefinitions="55,*,150" Margin="4,7">
+                            <TextBlock Text="{Binding LampLabel}" VerticalAlignment="Center" FontWeight="SemiBold" />
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                              <TextBlock Text="{Binding StateLabel}" />
+                              <TextBlock Text="{Binding ActivityLabel}" Classes="hint" FontSize="11" />
+                            </StackPanel>
+                          </Grid>
+                        </DataTemplate>
+                      </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid ColumnDefinitions="*,Auto,Auto">
+                      <TextBox x:Name="AgentNameText" Watermark="选择 Agent 后可修改显示名称" MaxLength="80" />
+                      <Button Grid.Column="1" x:Name="AgentRenameButton" Content="保存名称" Margin="8,0,0,0" />
+                      <Button Grid.Column="2" x:Name="AgentLocateButton" Content="定位灯珠" Margin="8,0,0,0" />
+                    </Grid>
+                  </StackPanel>
+                </Border>
+                <Border Classes="card">
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="统一状态灯效" Classes="section" />
+                    <TextBlock Text="以下设置对所有 Agent 生效，与整体模式的灯效分别保存。" Classes="hint" TextWrapping="Wrap" />
+                    <Grid ColumnDefinitions="*,16,*">
+                      <StackPanel Spacing="6"><TextBlock Text="工作状态"/><ComboBox x:Name="AgentLightStateCombo" ItemTemplate="{StaticResource EnumItemTemplate}" /></StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="6"><TextBlock Text="灯效"/><ComboBox x:Name="AgentLightEffectCombo" ItemTemplate="{StaticResource EnumItemTemplate}" /></StackPanel>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,16,*,16,*">
+                      <StackPanel Spacing="6"><TextBlock Text="颜色"/><ColorPicker x:Name="AgentColorPicker" IsAlphaEnabled="False" IsAlphaVisible="False" /></StackPanel>
+                      <StackPanel Grid.Column="2" Spacing="6"><TextBlock Text="亮度（%）"/><NumericUpDown x:Name="AgentBrightnessNumber" Minimum="0" Maximum="100" Increment="5" FormatString="0" /></StackPanel>
+                      <StackPanel Grid.Column="4" Spacing="6"><TextBlock Text="周期（毫秒）"/><NumericUpDown x:Name="AgentPeriodNumber" Minimum="400" Maximum="10000" Increment="100" FormatString="0" /></StackPanel>
+                    </Grid>
+                    <TextBlock Text="正在触摸授权的 Agent 使用“等待触摸”灯效；其他授权等待使用“客户端授权 / 排队”灯效。定位功能在授权期间暂停。" Classes="hint" TextWrapping="Wrap" />
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+              <Border x:Name="OverallAgentEditor" Classes="card">
+                <StackPanel>
+                  <TextBlock Text="编辑一个状态" Classes="section" />
+                  <TextBlock Text="每个状态的颜色、亮度和灯珠范围都会独立保存。"
+                             Classes="hint" Margin="0,0,0,12" />
+                  <ComboBox x:Name="AiStateCombo" ItemTemplate="{StaticResource EnumItemTemplate}"
+                            MaxWidth="320" HorizontalAlignment="Left" />
+                  <ComboBox x:Name="AiStateProfileCombo" IsVisible="False" />
+                </StackPanel>
+              </Border>
+              <Expander Header="AI 高级设置" Classes="advanced">
+                <Border Classes="card" Margin="0,10,0,0">
+                  <StackPanel>
+                    <CheckBox x:Name="CodexTouchCheck" Content="Codex / Claude 原生授权时允许触摸确认" />
+                    <TextBlock Text="Cursor 默认只联动状态，授权请在客户端确认。以下额外拦截不是原生窗口授权，启用后可能需要确认两次。" Classes="hint" TextWrapping="Wrap" Margin="0,8,0,0" />
+                    <CheckBox x:Name="GateFileToolsCheck" Content="Cursor 文件写入额外触摸拦截（默认关闭）" Margin="0,8,0,0" />
+                    <Grid ColumnDefinitions="*,16,*" Margin="0,14,0,0">
+                      <StackPanel><TextBlock Text="Cursor Shell 额外拦截"/><ComboBox x:Name="ShellGateCombo" ItemTemplate="{StaticResource EnumItemTemplate}"/></StackPanel>
+                      <StackPanel Grid.Column="2"><TextBlock Text="Cursor MCP 额外拦截"/><ComboBox x:Name="McpGateCombo" ItemTemplate="{StaticResource EnumItemTemplate}"/></StackPanel>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,16,*" Margin="0,12,0,0">
+                      <StackPanel><TextBlock Text="完成提示（毫秒）"/><NumericUpDown x:Name="DoneOverlayNumber" Minimum="0" Maximum="60000" Increment="100" FormatString="0"/></StackPanel>
+                      <StackPanel Grid.Column="2"><TextBlock Text="错误提示（毫秒）"/><NumericUpDown x:Name="ErrorOverlayNumber" Minimum="0" Maximum="60000" Increment="100" FormatString="0"/></StackPanel>
+                    </Grid>
+                  </StackPanel>
+                </Border>
+              </Expander>
+            </StackPanel>
+          </ScrollViewer>
+
+          <ScrollViewer x:Name="SystemPage" IsVisible="False">
+            <StackPanel MaxWidth="760" HorizontalAlignment="Stretch">
+              <TextBlock Text="SYSTEM STATUS" Classes="eyebrow" />
+              <TextBlock Text="系统状态" Classes="pageTitle" Margin="0,4,0,4" />
+              <TextBlock Text="用一眼就能读懂的灯光，显示负载、温度和电量。"
+                         Classes="hint" FontSize="13" Margin="0,0,0,20" />
+              <Border Classes="card" Background="{DynamicResource SuccessBackground}" BorderBrush="{DynamicResource SuccessBorder}">
+                <Grid ColumnDefinitions="*,Auto">
+                  <StackPanel>
+                    <TextBlock Text="当前读数" Foreground="{DynamicResource SuccessText}" FontWeight="SemiBold" />
+                    <TextBlock x:Name="MetricValueText" Text="--" FontSize="38"
+                               FontWeight="SemiBold" Foreground="{DynamicResource SuccessStrongText}" Margin="0,4,0,0" />
+                    <TextBlock x:Name="MetricStatusText" Text="等待采样" Classes="hint" />
+                  </StackPanel>
+                  <TextBlock Grid.Column="1" Text="◉" FontSize="44" Foreground="{DynamicResource SuccessDot}"
+                             VerticalAlignment="Center" Margin="20,0,8,0" />
+                </Grid>
+              </Border>
+              <Border Classes="card">
+                <Grid ColumnDefinitions="*,16,*">
+                  <StackPanel>
+                    <TextBlock Text="显示内容" Classes="section" />
+                    <ComboBox x:Name="MetricCombo" ItemTemplate="{StaticResource EnumItemTemplate}" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="2">
+                    <TextBlock Text="灯光表达" Classes="section" />
+                    <ComboBox x:Name="SystemVisualizerCombo" ItemTemplate="{StaticResource EnumItemTemplate}" />
+                  </StackPanel>
+                </Grid>
+              </Border>
+              <ComboBox x:Name="SystemProfileCombo" IsVisible="False" />
+              <Expander Header="系统状态高级设置" Classes="advanced">
+                <Border Classes="card" Margin="0,10,0,0">
+                  <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,Auto">
+                    <StackPanel><TextBlock Text="显示下限"/><NumericUpDown x:Name="DisplayMinNumber" Minimum="-100000" Maximum="100000" Increment="1" FormatString="0.##"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="显示上限"/><NumericUpDown x:Name="DisplayMaxNumber" Minimum="-100000" Maximum="100000" Increment="1" FormatString="0.##"/></StackPanel>
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,14,0,0">
+                      <Grid ColumnDefinitions="*,Auto"><TextBlock Text="刷新速度"/><TextBlock Grid.Column="1" x:Name="MetricIntervalValue" Classes="hint"/></Grid>
+                      <Slider x:Name="MetricIntervalSlider" Minimum="100" Maximum="5000" TickFrequency="50" IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </Expander>
+            </StackPanel>
+          </ScrollViewer>
+
+          <ScrollViewer x:Name="MusicPage" IsVisible="False">
+            <StackPanel MaxWidth="760" HorizontalAlignment="Stretch">
+              <TextBlock Text="MUSIC VIBE" Classes="eyebrow" />
+              <TextBlock Text="音乐律动" Classes="pageTitle" Margin="0,4,0,4" />
+              <TextBlock Text="让灯光跟随系统正在播放的音乐呼吸和跳动。"
+                         Classes="hint" FontSize="13" Margin="0,0,0,20" />
+              <Border Classes="card" Background="{DynamicResource WarnBackground}" BorderBrush="{DynamicResource WarnBorder}">
+                <StackPanel>
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="实时音量" Foreground="{DynamicResource WarnText}" FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="1" Text="♫" FontSize="24" Foreground="{DynamicResource WarnIcon}" />
+                  </Grid>
+                  <ProgressBar x:Name="AudioLevelBar" Minimum="0" Maximum="1" Height="12" Margin="0,12,0,7" />
+                  <TextBlock x:Name="AudioStatusText" Text="等待音频权限" Classes="hint" TextWrapping="Wrap" />
+                </StackPanel>
+              </Border>
+              <Border Classes="card">
+                <Grid ColumnDefinitions="*,16,*">
+                  <StackPanel>
+                    <TextBlock Text="律动方式" Classes="section" />
+                    <ComboBox x:Name="MusicVisualizerCombo" ItemTemplate="{StaticResource EnumItemTemplate}" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="2">
+                    <Grid ColumnDefinitions="*,Auto"><TextBlock Text="灵敏度" Classes="section"/><TextBlock Grid.Column="1" x:Name="SensitivityValue" Classes="hint"/></Grid>
+                    <Slider x:Name="SensitivitySlider" Minimum="0.1" Maximum="5" TickFrequency="0.1" IsSnapToTickEnabled="True" />
+                  </StackPanel>
+                </Grid>
+              </Border>
+              <ComboBox x:Name="MusicProfileCombo" IsVisible="False" />
+              <Expander Header="音乐高级设置" Classes="advanced">
+                <Border Classes="card" Margin="0,10,0,0">
+                  <Grid ColumnDefinitions="*,16,*" RowDefinitions="Auto,Auto">
+                    <StackPanel>
+                      <Grid ColumnDefinitions="*,Auto"><TextBlock Text="噪声门限"/><TextBlock Grid.Column="1" x:Name="NoiseGateValue" Classes="hint"/></Grid>
+                      <Slider x:Name="NoiseGateSlider" Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                      <Grid ColumnDefinitions="*,Auto"><TextBlock Text="帧率"/><TextBlock Grid.Column="1" x:Name="FpsValue" Classes="hint"/></Grid>
+                      <Slider x:Name="FpsSlider" Minimum="1" Maximum="30" TickFrequency="1" IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,14,0,0">
+                      <Grid ColumnDefinitions="*,Auto"><TextBlock Text="跟随速度"/><TextBlock Grid.Column="1" x:Name="AttackValue" Classes="hint"/></Grid>
+                      <Slider x:Name="AttackSlider" Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,14,0,0">
+                      <Grid ColumnDefinitions="*,Auto"><TextBlock Text="回落速度"/><TextBlock Grid.Column="1" x:Name="ReleaseValue" Classes="hint"/></Grid>
+                      <Slider x:Name="ReleaseSlider" Minimum="0" Maximum="1" TickFrequency="0.01" IsSnapToTickEnabled="True" />
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </Expander>
+            </StackPanel>
+          </ScrollViewer>
+
+          <ScrollViewer x:Name="SettingsPage" IsVisible="False">
+            <StackPanel MaxWidth="760" HorizontalAlignment="Stretch">
+              <TextBlock Text="PREFERENCES" Classes="eyebrow" />
+              <TextBlock Text="设置" Classes="pageTitle" Margin="0,4,0,20" />
+              <Border Classes="card">
+                <StackPanel>
+                  <TextBlock Text="使用体验" Classes="section" />
+                  <CheckBox x:Name="LaunchAtLoginCheck" Content="登录 macOS 后自动启动" />
+                  <CheckBox x:Name="CloseToTrayCheck" Content="关闭窗口后继续在菜单栏运行" Margin="0,8,0,0" />
+                  <CheckBox x:Name="AlwaysPermissionCheck" Content="其他模式中也显示 AI 授权提醒" Margin="0,8,0,0" />
+                  <CheckBox x:Name="PreventSleepCheck" Content="灯光开启时阻止电脑闲置休眠" Margin="0,8,0,0" />
+                  <TextBlock Text="灯带由读卡器供电，电脑休眠会断电，唤醒后通常要重新插拔才能恢复。只挡「闲置超时」这一种休眠：合上盖子、主动选择睡眠或电量耗尽仍会休眠，系统不允许任何程序拦截这些。屏幕也仍可正常关闭。"
+                             Classes="hint" TextWrapping="Wrap" Margin="26,4,0,0" />
+                  <Grid ColumnDefinitions="*,Auto" Margin="0,16,0,0">
+                    <StackPanel>
+                      <TextBlock Text="总亮度安全上限" />
+                      <TextBlock Text="每个模式仍保留自己的独立亮度" Classes="hint" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" x:Name="GlobalBrightnessText" VerticalAlignment="Center" Margin="12,0,0,0" />
+                  </Grid>
+                  <Slider x:Name="GlobalBrightnessSlider" Minimum="0" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" />
+                  <ComboBox x:Name="ModeCombo" IsVisible="False" />
+                </StackPanel>
+              </Border>
+              <Border Classes="card">
+                <StackPanel>
+                  <TextBlock Text="设备" Classes="section" />
+                  <TextBlock Text="自动兼容 PICO_RGB 与旧版 PICO_RAM。" Classes="hint" />
+                  <TextBlock x:Name="DeviceInfoText" Text="尚未连接设备" Classes="hint" Margin="0,6,0,0" />
+                  <Grid ColumnDefinitions="*,16,*" Margin="0,14,0,0">
+                    <StackPanel><TextBlock Text="灯珠总数"/><NumericUpDown x:Name="LedCountNumber" Minimum="1" Maximum="64" Increment="1" FormatString="0"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="授权超时（秒）"/><NumericUpDown x:Name="ApprovalTimeoutNumber" Minimum="5" Maximum="600" Increment="5" FormatString="0"/></StackPanel>
+                  </Grid>
+                  <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,14,0,0">
+                    <Button x:Name="ReconnectButton" Content="重新连接" Classes="primary" />
+                    <Button x:Name="OpenConfigButton" Content="打开配置目录" />
+                  </StackPanel>
+                </StackPanel>
+              </Border>
+              <Expander Header="触摸操作" Classes="advanced">
+                <Border Classes="card" Margin="0,10,0,0">
+                  <StackPanel>
+                    <CheckBox x:Name="TouchEnabledCheck" Content="启用触摸操作" />
+                    <ComboBox x:Name="TouchContextCombo" ItemTemplate="{StaticResource EnumItemTemplate}" Margin="0,12,0,0" />
+                    <Grid ColumnDefinitions="*,12,*" RowDefinitions="Auto,Auto" Margin="0,12,0,0">
+                      <StackPanel><TextBlock Text="单击"/><ComboBox x:Name="TouchClickCombo" ItemTemplate="{StaticResource EnumItemTemplate}"/></StackPanel>
+                      <StackPanel Grid.Column="2"><TextBlock Text="双击"/><ComboBox x:Name="TouchDoubleCombo" ItemTemplate="{StaticResource EnumItemTemplate}"/></StackPanel>
+                      <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,12,0,0"><TextBlock Text="长按"/><ComboBox x:Name="TouchLongCombo" ItemTemplate="{StaticResource EnumItemTemplate}"/></StackPanel>
+                    </Grid>
+                    <TextBlock x:Name="LastTouchText" Text="等待触摸" Classes="hint" Margin="0,12,0,0" />
+                  </StackPanel>
+                </Border>
+              </Expander>
+              <Expander Header="AI 集成" Classes="advanced">
+                <Border Classes="card" Margin="0,10,0,0">
+                  <StackPanel>
+                    <TextBlock Text="安装 Cursor、Codex 和 Claude Code 的状态联动与触摸授权支持。" Classes="hint" />
+                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,12,0,0">
+                      <Button x:Name="InstallHooksButton" Content="安装或更新" />
+                      <Button x:Name="UninstallHooksButton" Content="移除" />
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+              </Expander>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" x:Name="LightEditorPanel"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+          <Border Classes="card" Margin="0,0,2,0" VerticalAlignment="Top" Padding="20">
+            <StackPanel>
+              <TextBlock Text="当前模式灯光" Classes="eyebrow" />
+              <TextBlock x:Name="LightEditorTitle" Text="AI 空闲" FontSize="21"
+                         FontWeight="SemiBold" Margin="0,4,0,4" />
+              <TextBlock Text="只影响当前模式或状态" Classes="hint" />
+              <ItemsControl x:Name="LedPreview" Margin="0,18,0,16">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate><StackPanel Orientation="Horizontal" Spacing="5" /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate><Ellipse Width="18" Height="18" Fill="{Binding}" /></DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <ComboBox x:Name="ProfileCombo" IsVisible="False" />
+              <TextBox x:Name="ProfileNameText" IsVisible="False" />
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="亮度" FontWeight="SemiBold" />
+                <TextBlock Grid.Column="1" x:Name="ProfileBrightnessValue" Classes="hint" />
+              </Grid>
+              <Slider x:Name="ProfileBrightnessSlider" Minimum="0" Maximum="255"
+                      TickFrequency="1" IsSnapToTickEnabled="True" />
+              <Grid ColumnDefinitions="*,12,*" Margin="0,14,0,0">
+                <StackPanel><TextBlock Text="起始灯珠"/><NumericUpDown x:Name="StartNumber" Minimum="0" Maximum="63" Increment="1" FormatString="0"/></StackPanel>
+                <StackPanel Grid.Column="2"><TextBlock Text="灯珠数量"/><NumericUpDown x:Name="CountNumber" Minimum="1" Maximum="64" Increment="1" FormatString="0"/></StackPanel>
+              </Grid>
+              <StackPanel x:Name="NativeEffectPanel" Margin="0,14,0,0">
+                <TextBlock Text="效果" />
+                <ComboBox x:Name="EffectCombo" ItemTemplate="{StaticResource EnumItemTemplate}" />
+              </StackPanel>
+              <Grid ColumnDefinitions="*,12,*" Margin="0,12,0,0">
+                <StackPanel>
+                  <TextBlock Text="主颜色"/>
+                  <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+                    <ColorPicker x:Name="PrimaryColorPicker" HorizontalAlignment="Left"
+                                 IsAlphaEnabled="False" IsAlphaVisible="False" />
+                    <TextBlock Grid.Column="1" x:Name="PrimaryColorHex" Classes="hint"
+                               VerticalAlignment="Center" Margin="8,0,0,0" />
+                  </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                  <TextBlock Text="副颜色"/>
+                  <Grid ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+                    <ColorPicker x:Name="SecondaryColorPicker" HorizontalAlignment="Left"
+                                 IsAlphaEnabled="False" IsAlphaVisible="False" />
+                    <TextBlock Grid.Column="1" x:Name="SecondaryColorHex" Classes="hint"
+                               VerticalAlignment="Center" Margin="8,0,0,0" />
+                  </Grid>
+                </StackPanel>
+              </Grid>
+              <CheckBox x:Name="ReverseCheck" Content="反向显示" Margin="0,12,0,0" />
+              <Button x:Name="PreviewButton" Content="在灯带上预览" Classes="primary"
+                      HorizontalAlignment="Stretch" Margin="0,16,0,0" />
+              <Expander x:Name="NativeAdvancedPanel" Header="灯效高级参数" Classes="advanced">
+                <StackPanel Margin="0,10,0,0">
+                  <Grid ColumnDefinitions="*,Auto"><TextBlock Text="速度"/><TextBlock Grid.Column="1" x:Name="SpeedValue" Classes="hint"/></Grid>
+                  <Slider x:Name="SpeedSlider" Minimum="1" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" />
+                  <Grid ColumnDefinitions="*,10,*" Margin="0,10,0,0">
+                    <StackPanel><TextBlock Text="亮起 ms"/><NumericUpDown x:Name="OnMsNumber" Minimum="0" Maximum="65535" Increment="10" FormatString="0"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="熄灭 ms"/><NumericUpDown x:Name="OffMsNumber" Minimum="0" Maximum="65535" Increment="10" FormatString="0"/></StackPanel>
+                  </Grid>
+                  <Grid ColumnDefinitions="*,10,*" Margin="0,10,0,0">
+                    <StackPanel><TextBlock Text="脉冲次数"/><NumericUpDown x:Name="PulsesNumber" Minimum="1" Maximum="255" Increment="1" FormatString="0"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="间隔 ms"/><NumericUpDown x:Name="GapMsNumber" Minimum="0" Maximum="65535" Increment="10" FormatString="0"/></StackPanel>
+                  </Grid>
+                  <Grid ColumnDefinitions="*,10,*" Margin="0,10,0,0">
+                    <StackPanel><TextBlock Text="最大电流 mA"/><NumericUpDown x:Name="MaxMaNumber" Minimum="0" Maximum="65535" Increment="10" FormatString="0"/></StackPanel>
+                    <StackPanel Grid.Column="2"><TextBlock Text="调色板"/><NumericUpDown x:Name="PaletteNumber" Minimum="0" Maximum="3" Increment="1" FormatString="0"/></StackPanel>
+                  </Grid>
+                  <CheckBox x:Name="GammaCheck" Content="Gamma 校正" Margin="0,10,0,0" />
+                  <CheckBox x:Name="FadeCheck" Content="渐变闪烁" Margin="0,6,0,0" />
+                </StackPanel>
+              </Expander>
+            </StackPanel>
+          </Border>
+        </ScrollViewer>
+      </Grid>
+    </Grid>
+
+    <Border Grid.Row="2" Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource SurfaceBorder}"
+            BorderThickness="0,1,0,0" Padding="24,9">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock x:Name="FooterText" Text="配置会自动保存" Classes="hint"
+                   VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        <TextBlock Grid.Column="1" x:Name="VersionText" Classes="hint"
+                   VerticalAlignment="Center" Margin="16,0,0,0" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

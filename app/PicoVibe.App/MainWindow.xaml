@@ -1,0 +1,276 @@
+<Window x:Class="PicoVibe.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="clr-namespace:PicoVibe.App.Services"
+        Title="Pico Vibe" Width="980" Height="760" MinWidth="900" MinHeight="680"
+        Icon="pack://application:,,,/Assets/PicoVibe.ico"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="24,17">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Assets/PicoVibe.ico" Width="38" Height="38"
+                           Margin="0,0,12,0" SnapsToDevicePixels="True"/>
+                    <StackPanel>
+                        <TextBlock Text="Pico Vibe" FontSize="21" FontWeight="SemiBold"/>
+                        <TextBlock Text="让开发状态和电脑节奏看得见" Style="{StaticResource Hint}"/>
+                    </StackPanel>
+                </StackPanel>
+                <Border Grid.Column="1" CornerRadius="14" Padding="12,6" Background="#EAF9F0">
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse x:Name="ConnectionDot" Width="8" Height="8" Fill="#28A745" Margin="0,0,7,0"/>
+                        <TextBlock x:Name="ConnectionText" Text="正在查找设备" FontSize="12"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Margin="24,16,24,0" Style="{StaticResource Card}" Padding="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Background="#F0F2F7">
+                    <RadioButton x:Name="AiModeButton" GroupName="PrimaryMode" Content="AI 状态" Style="{StaticResource ModeToggle}" IsChecked="True" Checked="ModeButton_Checked"/>
+                    <RadioButton x:Name="SystemModeButton" GroupName="PrimaryMode" Content="系统监控" Style="{StaticResource ModeToggle}" Checked="ModeButton_Checked"/>
+                    <RadioButton x:Name="MusicModeButton" GroupName="PrimaryMode" Content="音乐律动" Style="{StaticResource ModeToggle}" Checked="ModeButton_Checked"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="12,0,0,0">
+                    <CheckBox x:Name="LightsEnabledCheck" Content="灯光开启" IsChecked="True" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Button x:Name="SettingsButton" Content="触摸与设置" Click="SettingsButton_Click" Padding="11,5" MinHeight="30"/>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="总亮度上限" Margin="18,0,10,0" FontWeight="SemiBold"/>
+                <Slider Grid.Column="3" x:Name="GlobalBrightnessSlider" Minimum="0" Maximum="100" Value="50" TickFrequency="5" ValueChanged="GlobalBrightnessSlider_ValueChanged"/>
+                <TextBlock Grid.Column="4" x:Name="GlobalBrightnessText" Text="50%" Width="48" TextAlignment="Right" FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="2" x:Name="MainTabs" Margin="24,0,24,12" Background="Transparent" BorderThickness="0" TabStripPlacement="Left" SelectionChanged="MainTabs_SelectionChanged">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem Header="AI">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.RowDefinitions><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="260"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="AI 状态灯" Style="{StaticResource SectionTitle}"/>
+                                    <TextBlock Text="为等待、思考、运行、询问、完成和错误分别选择灯效。普通 running 不会占用黄色授权灯。" Style="{StaticResource Hint}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <TextBlock Text="正在编辑" Margin="0,0,10,0"/>
+                                    <ComboBox x:Name="AiStateCombo" Width="145" SelectionChanged="AiStateCombo_SelectionChanged"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="灯效详细配置" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,12"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="18"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0"><TextBlock Text="灯效模式"/><ComboBox x:Name="EffectModeCombo"/></StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="2"><TextBlock Text="主颜色"/><Button x:Name="PrimaryColorButton" Content="#6657E8" Click="ColorButton_Click" HorizontalContentAlignment="Left"/></StackPanel>
+                                    <StackPanel Grid.Row="1" Margin="0,12,0,0"><TextBlock Text="次颜色"/><Button x:Name="SecondaryColorButton" Content="#33D6C5" Click="ColorButton_Click" HorizontalContentAlignment="Left"/></StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,12,0,0"><TextBlock Text="状态亮度"/><Slider x:Name="ProfileBrightnessSlider" Minimum="0" Maximum="255" Value="64"/><TextBlock x:Name="ProfileBrightnessText" Style="{StaticResource Hint}" Text="64 / 255"/></StackPanel>
+                                    <StackPanel Grid.Row="2" Margin="0,12,0,0"><TextBlock Text="动画速度"/><Slider x:Name="EffectSpeedSlider" Minimum="1" Maximum="255" Value="40"/><TextBlock x:Name="EffectSpeedText" Style="{StaticResource Hint}" Text="40"/></StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,12,0,0"><TextBlock Text="灯珠范围"/><StackPanel Orientation="Horizontal"><TextBox x:Name="StartLedText" Width="70" Text="0"/><TextBlock Text=" 起始，"/><TextBox x:Name="LedCountText" Width="70" Text="12"/><TextBlock Text=" 颗"/></StackPanel></StackPanel>
+                                    <StackPanel Grid.Row="3" Margin="0,12,0,0"><TextBlock Text="闪烁时序 (ms)"/><StackPanel Orientation="Horizontal"><TextBox x:Name="BlinkOnText" Width="76" Text="220"/><TextBlock Text=" 亮  "/><TextBox x:Name="BlinkOffText" Width="76" Text="220"/><TextBlock Text=" 灭"/></StackPanel></StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,12,0,0"><TextBlock Text="闪烁次数 / 间隔"/><StackPanel Orientation="Horizontal"><TextBox x:Name="BlinkPulsesText" Width="76" Text="1"/><TextBlock Text=" 次  "/><TextBox x:Name="BlinkGapText" Width="76" Text="0"/><TextBlock Text=" ms"/></StackPanel></StackPanel>
+                                    <StackPanel Grid.Row="4" Margin="0,12,0,0"><TextBlock Text="调色板"/><ComboBox x:Name="PaletteCombo"/></StackPanel>
+                                    <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0,14,0,0">
+                                        <CheckBox x:Name="ReverseCheck" Content="反向" Margin="0,0,18,0"/>
+                                        <CheckBox x:Name="GammaCheck" Content="Gamma 校正" Margin="0,0,18,0"/>
+                                        <CheckBox x:Name="FadeCheck" Content="闪烁渐变"/>
+                                        <TextBlock Text="  限流 mA" Margin="22,0,8,0"/><TextBox x:Name="MaxMaText" Width="80" Text="200"/>
+                                    </StackPanel>
+                                </Grid>
+                                <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                                    <Button Content="保存这个状态" Style="{StaticResource PrimaryButton}" Click="SaveAiProfile_Click"/>
+                                    <Button Content="在灯带上预览" Click="PreviewAiProfile_Click"/>
+                                    <TextBlock x:Name="AiSaveHint" Style="{StaticResource Hint}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="触发授权的范围" FontWeight="SemiBold" FontSize="15"/>
+                                <TextBlock Text="只在真正需要用户决策时进入黄色授权状态。" Style="{StaticResource Hint}" Margin="0,3,0,12"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                    <StackPanel><TextBlock Text="Cursor Shell"/><ComboBox x:Name="ShellGateCombo"/></StackPanel>
+                                    <StackPanel Grid.Column="2"><TextBlock Text="Cursor MCP"/><ComboBox x:Name="McpGateCombo"/></StackPanel>
+                                </Grid>
+                                <WrapPanel Margin="0,12,0,0">
+                                    <CheckBox x:Name="AiEnabledCheck" Content="启用 AI 状态联动" IsChecked="True" Margin="0,0,24,0"/>
+                                    <CheckBox x:Name="FileToolGateCheck" Content="文件写入工具也要求触摸" Margin="0,0,24,0"/>
+                                    <CheckBox x:Name="CodexTouchCheck" Content="Codex / Claude Code 授权使用触摸" IsChecked="True"/>
+                                    <CheckBox x:Name="AmbientAskOverrideCheck" Content="氛围模式中也显示授权灯" IsChecked="True" Margin="24,0,0,0"/>
+                                    <TextBlock Text="授权等待" Margin="24,3,8,0"/>
+                                    <TextBox x:Name="ApprovalTimeoutText" Width="62" Text="90"/>
+                                    <TextBlock Text=" 秒" Margin="4,3,0,0"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="System">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="220"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="系统监控氛围" Style="{StaticResource SectionTitle}"/>
+                                    <TextBlock Text="把电脑负载或可用温度传感器变成灯带。无法读取的温度会明确显示“不可用”，不会伪造数值。" Style="{StaticResource Hint}"/>
+                                </StackPanel>
+                                <Border Grid.Column="1" CornerRadius="12" Background="#F5F3FF" Padding="16">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock x:Name="MetricValueText" Text="--" FontSize="34" FontWeight="SemiBold" Foreground="{StaticResource AccentBrush}" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="MetricStatusText" Text="等待采样" Style="{StaticResource Hint}" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="18"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                <StackPanel><TextBlock Text="监控项目"/><ComboBox x:Name="SystemMetricCombo" SelectionChanged="SystemSetting_Changed"/></StackPanel>
+                                <StackPanel Grid.Column="2"><TextBlock Text="显示样式"/><ComboBox x:Name="SystemVisualizerCombo" SelectionChanged="SystemSetting_Changed"/></StackPanel>
+                                <StackPanel Grid.Row="1" Margin="0,14,0,0"><TextBlock Text="低值颜色"/><Button x:Name="SystemLowColorButton" Content="#27D17F" Click="ColorButton_Click"/></StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,14,0,0"><TextBlock Text="高值颜色"/><Button x:Name="SystemHighColorButton" Content="#FF4D6D" Click="ColorButton_Click"/></StackPanel>
+                                <StackPanel Grid.Row="2" Margin="0,14,0,0"><TextBlock Text="显示下限"/><TextBox x:Name="SystemMinText" Text="0"/></StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,14,0,0"><TextBlock Text="显示上限"/><TextBox x:Name="SystemMaxText" Text="100"/></StackPanel>
+                                <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Margin="0,14,0,0"><TextBlock Text="刷新速度（建议 250 ms 以上）"/><Slider x:Name="SystemIntervalSlider" Minimum="250" Maximum="2000" Value="500" TickFrequency="250"/><TextBlock x:Name="SystemIntervalText" Text="500 ms" Style="{StaticResource Hint}"/></StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Music">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="260"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="音乐律动" Style="{StaticResource SectionTitle}"/>
+                                    <TextBlock Text="使用 Windows 当前默认输出设备的回放音频，做平滑、低延迟的灯光响应。音频只在本机计算，不录音、不上传。" Style="{StaticResource Hint}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="实时电平" HorizontalAlignment="Center" Style="{StaticResource Hint}"/>
+                                    <ProgressBar x:Name="AudioLevelBar" Height="16" Minimum="0" Maximum="1" Margin="0,9,0,0"/>
+                                    <TextBlock x:Name="AudioStatusText" Text="等待音频设备" HorizontalAlignment="Center" Style="{StaticResource Hint}" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="18"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                <StackPanel><TextBlock Text="律动样式"/><ComboBox x:Name="MusicVisualizerCombo" SelectionChanged="MusicSetting_Changed"/></StackPanel>
+                                <StackPanel Grid.Column="2"><TextBlock Text="主颜色"/><Button x:Name="MusicPrimaryColorButton" Content="#6657E8" Click="ColorButton_Click"/></StackPanel>
+                                <StackPanel Grid.Row="1" Margin="0,14,0,0"><TextBlock Text="次颜色"/><Button x:Name="MusicSecondaryColorButton" Content="#33D6C5" Click="ColorButton_Click"/></StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,14,0,0"><TextBlock Text="灵敏度"/><Slider x:Name="MusicSensitivitySlider" Minimum="0.5" Maximum="{x:Static services:UiLimits.MaximumMusicSensitivity}" Value="2"/><TextBlock x:Name="MusicSensitivityText" Text="2.0×" Style="{StaticResource Hint}"/></StackPanel>
+                                <StackPanel Grid.Row="2" Margin="0,14,0,0"><TextBlock Text="噪声门限"/><Slider x:Name="MusicNoiseGateSlider" Minimum="0" Maximum="0.2" Value="0.015"/><TextBlock x:Name="MusicNoiseGateText" Text="1.5%" Style="{StaticResource Hint}"/></StackPanel>
+                                <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,14,0,0"><TextBlock Text="平滑度"/><Slider x:Name="MusicSmoothingSlider" Minimum="0" Maximum="0.95" Value="0.65"/><TextBlock x:Name="MusicSmoothingText" Text="65%" Style="{StaticResource Hint}"/></StackPanel>
+                                <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Margin="0,14,0,0"><TextBlock Text="帧率（稳定优先，默认 10 FPS）"/><Slider x:Name="MusicFpsSlider" Minimum="4" Maximum="15" Value="10" TickFrequency="1"/><TextBlock x:Name="MusicFpsText" Text="10 FPS" Style="{StaticResource Hint}"/></StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Touch">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border Style="{StaticResource Card}">
+                            <StackPanel>
+                                <TextBlock Text="触摸控制" Style="{StaticResource SectionTitle}"/>
+                                <CheckBox x:Name="TouchEnabledCheck" Content="启用触摸控制" IsChecked="True" Margin="0,8,0,0"/>
+                                <TextBlock Text="每个手势只执行一次。真正进入 AI 授权窗口后才使用“授权中”映射；系统监控和音乐模式可单独设置。" Style="{StaticResource Hint}" Margin="0,4,0,14"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition/><ColumnDefinition Width="18"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="1" Text="普通状态" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="3" Text="AI 授权中" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="1" Text="单击" Margin="0,13,0,0"/><ComboBox Grid.Row="1" Grid.Column="1" x:Name="NormalClickCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="1" Grid.Column="3" x:Name="PermissionClickCombo" Margin="0,10,0,0"/>
+                                    <TextBlock Grid.Row="2" Text="双击" Margin="0,13,0,0"/><ComboBox Grid.Row="2" Grid.Column="1" x:Name="NormalDoubleCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="2" Grid.Column="3" x:Name="PermissionDoubleCombo" Margin="0,10,0,0"/>
+                                    <TextBlock Grid.Row="3" Text="长按" Margin="0,13,0,0"/><ComboBox Grid.Row="3" Grid.Column="1" x:Name="NormalLongCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="3" Grid.Column="3" x:Name="PermissionLongCombo" Margin="0,10,0,0"/>
+                                </Grid>
+                                <Grid Margin="0,20,0,0">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition/><ColumnDefinition Width="18"/><ColumnDefinition/></Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="1" Text="系统监控" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="3" Text="音乐律动" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Row="1" Text="单击" Margin="0,13,0,0"/><ComboBox Grid.Row="1" Grid.Column="1" x:Name="SystemClickCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="1" Grid.Column="3" x:Name="MusicClickCombo" Margin="0,10,0,0"/>
+                                    <TextBlock Grid.Row="2" Text="双击" Margin="0,13,0,0"/><ComboBox Grid.Row="2" Grid.Column="1" x:Name="SystemDoubleCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="2" Grid.Column="3" x:Name="MusicDoubleCombo" Margin="0,10,0,0"/>
+                                    <TextBlock Grid.Row="3" Text="长按" Margin="0,13,0,0"/><ComboBox Grid.Row="3" Grid.Column="1" x:Name="SystemLongCombo" Margin="0,10,0,0"/><ComboBox Grid.Row="3" Grid.Column="3" x:Name="MusicLongCombo" Margin="0,10,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card}">
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="运行设置" FontWeight="SemiBold" FontSize="15"/>
+                                    <CheckBox x:Name="StartWithWindowsCheck" Content="开机自动启动并驻留托盘" Margin="0,12,0,0"/>
+                                    <CheckBox x:Name="CloseToTrayCheck" Content="关闭窗口时继续在后台运行" IsChecked="True" Margin="0,8,0,0"/>
+                                    <CheckBox x:Name="PreventSleepCheck" Content="灯光开启时阻止电脑闲置睡眠" Margin="0,8,0,0"/>
+                                    <TextBlock Text="灯带由读卡器供电，电脑睡眠会断电，唤醒后通常要重新插拔才能恢复。只挡「闲置超时」这一种睡眠：合上盖子、主动选择睡眠或电量耗尽仍会睡，系统不允许任何程序拦截这些。显示器也仍可正常关闭。"
+                                               Opacity="0.7" TextWrapping="Wrap" Margin="24,4,0,0"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <Button Content="重新检测设备" Click="Reconnect_Click"/>
+                                    <Button Content="打开 Codex Hook 审核" Click="OpenCodexHookReview_Click" Margin="0,8,8,0"/>
+                                    <Button Content="打开配置目录" Click="OpenConfigFolder_Click" Margin="0,8,8,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <Border Grid.Row="3" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" Padding="24,10">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <TextBlock x:Name="FooterStatusText" Text="配置会自动保存" Style="{StaticResource Hint}"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock x:Name="LastTouchText" Text="触摸：等待" Style="{StaticResource Hint}" Margin="0,0,18,0"/>
+                    <TextBlock x:Name="VersionText" Style="{StaticResource Hint}" Margin="0,0,18,0"/>
+                    <Button Content="立即保存" Style="{StaticResource PrimaryButton}" Click="SaveAll_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

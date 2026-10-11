@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key><string>zh_CN</string>
+  <key>CFBundleDisplayName</key><string>Pico Vibe</string>
+  <key>CFBundleExecutable</key><string>PicoVibe</string>
+  <key>CFBundleIconFile</key><string>PicoVibe</string>
+  <key>CFBundleIdentifier</key><string>com.picovibe.desktop</string>
+  <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+  <key>CFBundleName</key><string>Pico Vibe</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleShortVersionString</key><string>__VERSION__</string>
+  <key>CFBundleVersion</key><string>__BUILD__</string>
+  <key>LSMinimumSystemVersion</key><string>14.2</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSAudioCaptureUsageDescription</key><string>Pico Vibe 只读取系统音频的实时响度，用于驱动 RGB 音乐律动，不录音也不保存音频。</string>
+  <key>NSAppleEventsUsageDescription</key><string>Pico Vibe 在用户配置触摸“下一曲”后控制 Music 或 Spotify。</string>
+  <key>NSPrincipalClass</key><string>NSApplication</string>
+</dict>
+</plist>
