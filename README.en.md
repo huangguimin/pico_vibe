@@ -19,13 +19,14 @@ This repository open-sources the **Pico Vibe desktop app source (v1.1.26)** unde
 | Open | Closed |
 |---|---|
 | `app/` desktop app (macOS / Windows), hooks, and tests | Device firmware source |
-| | OTA signing, OTP, factory tooling, keys |
+| `integrations/` Codex status skill | OTA signing, OTP, factory tooling, keys |
+| `tools/macos/` macOS packaging and install scripts | |
 
 Firmware updates ship only as **Release assets**. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Build from source (macOS)
 
-Requires the .NET 8 SDK.
+Requires macOS 14.2+, the .NET 8 SDK, and Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
 export PATH="$HOME/.dotnet:$PATH"
@@ -33,8 +34,17 @@ dotnet test app/PicoVibe.Tests/PicoVibe.Tests.csproj -c Release
 dotnet test app/PicoVibe.App.Tests/PicoVibe.App.Tests.csproj -c Release
 dotnet test app/PicoVibe.Hook.Tests/PicoVibe.Hook.Tests.csproj -c Release
 dotnet test app/PicoVibe.Runtime.Tests/PicoVibe.Runtime.Tests.csproj -c Release
-dotnet build app/PicoVibe.Mac/PicoVibe.Mac.csproj -c Release
 ```
+
+Run the tests and build installable DMGs (including the music/temperature bridge and AI hook helpers):
+
+```bash
+APPLE_SIGN_IDENTITY=- bash tools/macos/build_release.sh
+```
+
+Artifacts land in `dist/macos/` (one arm64 and one x64 DMG). The default ad-hoc signature only works on your own Mac; distributing to others requires Developer ID signing and notarization (set `APPLE_SIGN_IDENTITY` / `APPLE_NOTARY_PROFILE`).
+
+> A plain `dotnet build` does not compile `PicoVibeMacBridge` and the other helpers, so music, temperature, and AI status features will not work — use the script above.
 
 App version: [`app/VERSION`](app/VERSION).
 

@@ -19,13 +19,14 @@
 | 开源 | 不开源 |
 |---|---|
 | `app/` 桌面端（macOS / Windows）、Hook 与测试 | 设备固件源码 |
-| | OTA 签名、OTP、量产工具、密钥 |
+| `integrations/` Codex 状态 Skill | OTA 签名、OTP、量产工具、密钥 |
+| `tools/macos/` macOS 打包与安装脚本 | |
 
 固件升级包仅以 **Release 附件** 提供。贡献说明见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ### 从源码构建（macOS）
 
-需要 .NET 8 SDK。
+需要 macOS 14.2+、.NET 8 SDK 和 Xcode Command Line Tools（`xcode-select --install`）。
 
 ```bash
 export PATH="$HOME/.dotnet:$PATH"
@@ -33,8 +34,17 @@ dotnet test app/PicoVibe.Tests/PicoVibe.Tests.csproj -c Release
 dotnet test app/PicoVibe.App.Tests/PicoVibe.App.Tests.csproj -c Release
 dotnet test app/PicoVibe.Hook.Tests/PicoVibe.Hook.Tests.csproj -c Release
 dotnet test app/PicoVibe.Runtime.Tests/PicoVibe.Runtime.Tests.csproj -c Release
-dotnet build app/PicoVibe.Mac/PicoVibe.Mac.csproj -c Release
 ```
+
+一键跑测试并打出可安装的 DMG（含音乐/温度桥接与 AI Hook 辅助程序）：
+
+```bash
+APPLE_SIGN_IDENTITY=- bash tools/macos/build_release.sh
+```
+
+产物在 `dist/macos/`（arm64 与 x64 各一个）。默认是本机临时签名，只适合自己电脑使用；分发给他人需 Developer ID 签名与公证（设置 `APPLE_SIGN_IDENTITY` / `APPLE_NOTARY_PROFILE`）。
+
+> 仅 `dotnet build` 不会编译 `PicoVibeMacBridge` 等辅助程序，音乐、温度和 AI 状态功能将不可用，请用上面的脚本构建。
 
 当前应用版本见 [`app/VERSION`](app/VERSION)。
 

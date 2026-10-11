@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pico Vibe Status"
+  short_description: "Deploy and diagnose Pico AI lights, ambient modes, and touch approvals"
+  default_prompt: "Set up, configure, or diagnose the Pico Vibe desktop broker and its Cursor/Codex/Claude Code touch-approval integration."

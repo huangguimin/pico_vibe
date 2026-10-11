@@ -7,6 +7,7 @@
 - Cursor / Codex / Claude Code 钩子适配与回归测试
 - macOS / Windows UI、灯效、无障碍与本地化
 - Bug 修复与测试补充
+- macOS 打包脚本改进（不含把私有密钥打进仓库）
 
 ## 不接受的请求
 
@@ -22,6 +23,12 @@ dotnet test app/PicoVibe.Tests/PicoVibe.Tests.csproj -c Release
 dotnet test app/PicoVibe.App.Tests/PicoVibe.App.Tests.csproj -c Release
 dotnet test app/PicoVibe.Hook.Tests/PicoVibe.Hook.Tests.csproj -c Release
 dotnet test app/PicoVibe.Runtime.Tests/PicoVibe.Runtime.Tests.csproj -c Release
+```
+
+macOS 安装包（临时签名，仅本机验证）：
+
+```bash
+APPLE_SIGN_IDENTITY=- bash tools/macos/build_release.sh
 ```
 
 请保持改动聚焦；大功能先开 issue 对齐产品边界。
